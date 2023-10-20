@@ -1,0 +1,51 @@
+.PHONY: all build run check help mocks clean test docs
+
+BIN=cypt
+
+all: lint check build
+
+build:
+	go build -o "${BIN}"
+
+test:
+	go test ./...
+
+lint-install:
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+lint:
+	golangci-lint run -v
+
+imports:
+	goimports -l -w ./...
+
+check:
+	go fmt ./...
+	go vet ./...
+
+run: build
+	"./${BIN}"
+
+clean:
+	go clean
+
+# mocks:
+# 	mockery --all --dir internal/dddcore/ --output test/mocks/dddcore
+# 	mockery --all --dir internal/user/ --output test/mocks/user
+# 	mockery --all --dir internal/logger/ --output test/mocks/logger
+
+upgrade:
+	go get -u ./...
+
+docs:
+	swag init -o docs/swagger
+
+help:
+	echo "make         "
+	echo "make build   "
+	echo "make test    "
+	echo "make check   "
+	echo "make run     "
+	echo "make mocks   "
+	echo "make upgrade "
+	echo "make docs    "
