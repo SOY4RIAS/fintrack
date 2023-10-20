@@ -34,7 +34,7 @@ jobs:
         run: go mod download
 
       - name: Run tests and generate coverage report
-        run: go test -race -coverprofile=coverage.txt -covermode=atomic
+        run: go test -race -v -coverprofile=coverage/coverage.txt -covermode=atomic ./...
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
